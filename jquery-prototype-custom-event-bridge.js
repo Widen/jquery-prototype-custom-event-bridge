@@ -8,9 +8,12 @@
  * The memo data object passed along by the Prototype trigger will be encoded in the first element of the event
  * data array received by the jQuery listener.
  */
+/*global jQuery, Element*/
 (function ($) {
-	var oldjQueryTrigger = $.event.trigger;
-	var oldPrototypeFire = Element.fire;
+    var oldjQueryTrigger, oldPrototypeFire;
+
+	oldjQueryTrigger = $.event.trigger;
+	oldPrototypeFire = Element.fire;
 
 	//trigger Prototype event handlers if jQuery fires an allowable Prototype custom event
 	$.event.trigger = function(event, data, elem, onlyHandlers) {
@@ -23,15 +26,15 @@
 			}
 		}
 		oldjQueryTrigger(event, data, elem, onlyHandlers);
-	}
+	};
 
 	//trigger jQuery event handlers if Prototype fires a custom event
 	Element.addMethods( {
 		fire: function(element, eventName, memo, bubble) {
 			if (eventName.indexOf(':') > 0) {
-				oldjQueryTrigger(eventName, memo ? [memo] : null, element, !bubble);
+				oldjQueryTrigger(eventName, memo ? [memo] : null, element, Object.isUndefined(bubble) ? false : !bubble);
 			}
 			oldPrototypeFire(element, eventName, memo, bubble);
 		}
 	});
-})(jQuery);
+}(jQuery));
