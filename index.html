@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+
+    <head>
+        <title>custom event bridge tester</title>
+        <link href="styles.css" rel="stylesheet" type="text/css"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script src="noconflict.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js"></script>
+        <script src="src/jquery-prototype-custom-event-bridge.js"></script>
+        <script src="test.js"></script>
+    </head>
+
+    <body>
+        <h2>jQuery-Prototype Custom Event Bridge Tester</h2>
+        <br />
+
+        <table border="1">
+            <tr id="jpe">
+                <td>jQuery triggered event with a Prototype observer (element):</td>
+                <td class="failure red">FAIL</td>
+                <td class="success green disNone">OK</td>
+            </tr>
+
+            <tr id="jpebParent">
+                <td id="jpeb">jQuery triggered event with a Prototype observer on parent (element):</td>
+                <td class="failure red">FAIL</td>
+                <td class="success green disNone">OK</td>
+            </tr>
+
+            <tr id="jje">
+                <td>jQuery triggered event with a jQuery observer (element):</td>
+                <td class="failure red">FAIL</td>
+                <td class="success green disNone">OK</td>
+            </tr>
+
+            <tr id="jped">
+                <td>jQuery triggered event, including data, with a Prototype observer (element):</td>
+                <td class="failure red">FAIL</td>
+                <td class="success green disNone">OK</td>
+            </tr>
+
+            <tr id="jjed">
+                <td>jQuery triggered event, including data, with a jQuery observer (element):</td>
+                <td class="failure red">FAIL</td>
+                <td class="success green disNone">OK</td>
+            </tr>
+
+            <tr id="pje">
+                <td>Prototype fired event with a jQuery listener (element):</td>
+                <td class="failure red">FAIL</td>
+                <td class="success green disNone">OK</td>
+            </tr>
+
+            <tr id="pjebParent">
+                <td id="pjeb">Prototype fired event with a jQuery listener on parent (element):</td>
+                <td class="failure red">FAIL</td>
+                <td class="success green disNone">OK</td>
+            </tr>
+
+            <tr id="ppe">
+                <td>Prototype fired event with a Prototype listener (element):</td>
+                <td class="failure red">FAIL</td>
+                <td class="success green disNone">OK</td>
+            </tr>
+
+            <tr id="pjed">
+                <td>Prototype fired event, including data, with a jQuery listener (element):</td>
+                <td class="failure red">FAIL</td>
+                <td class="success green disNone">OK</td>
+            </tr>
+
+            <tr id="pped">
+                <td>Prototype fired event, including data, with a Prototype listener (element):</td>
+                <td class="failure red">FAIL</td>
+                <td class="success green disNone">OK</td>
+            </tr>
+
+            <tr id="jpd">
+                <td>jQuery triggered event with a Prototype observer (document):</td>
+                <td class="failure red">FAIL</td>
+                <td class="success green disNone">OK</td>
+            </tr>
+
+            <tr id="jjd">
+                <td>jQuery triggered event with a jQuery observer (document):</td>
+                <td class="failure red">FAIL</td>
+                <td class="success green disNone">OK</td>
+            </tr>
+
+            <tr id="jpdd">
+                <td>jQuery triggered event, including data, with a Prototype observer (document):</td>
+                <td class="failure red">FAIL</td>
+                <td class="success green disNone">OK</td>
+            </tr>
+
+            <tr id="jjdd">
+                <td>jQuery triggered event, including data, with a jQuery observer (document):</td>
+                <td class="failure red">FAIL</td>
+                <td class="success green disNone">OK</td>
+            </tr>
+
+            <tr id="pjd">
+                <td>Prototype fired event with a jQuery listener (document):</td>
+                <td class="unsupported grey">NOT SUPPORTED</td>
+            </tr>
+
+            <tr id="ppd">
+                <td>Prototype fired event with a Prototype listener (document):</td>
+                <td class="failure red">FAIL</td>
+                <td class="success green disNone">OK</td>
+            </tr>
+
+            <tr id="pjdd">
+                <td>Prototype fired event, including data, with a jQuery listener (document):</td>
+                <td class="unsupported grey">NOT SUPPORTED</td>
+            </tr>
+
+            <tr id="jth">
+                <td>jQuery triggerHandler - ensure return value is not lost:</td>
+                <td class="failure red">FAIL</td>
+                <td class="success green disNone">OK</td>
+            </tr>
+
+            <tr id="ppdd">
+                <td>Prototype fired event, including data, with a Prototype listener (document):</td>
+                <td class="failure red">FAIL</td>
+                <td class="success green disNone">OK</td>
+            </tr>
+        </table>
+    </body>
+
+</html>
