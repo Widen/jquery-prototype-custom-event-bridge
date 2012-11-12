@@ -1,6 +1,8 @@
 jQuery-prototype-custom-event-bridge
 ====================================
 
+Test it [here](http://widen.github.com/jquery-prototype-custom-event-bridge).
+
 Allow custom events in the format `namespace:eventname` to pass between Prototype and jQuery.
 
 Such custom events triggered by jQuery will hit Prototype observers (as well as jQuery listeners).
