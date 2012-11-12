@@ -25,7 +25,7 @@
 				oldPrototypeFire(elem, event, data ? data[0] : null, !onlyHandlers);
 			}
 		}
-		oldjQueryTrigger(event, data, elem, onlyHandlers);
+		return oldjQueryTrigger(event, data, elem, onlyHandlers);
 	};
 
 	//trigger jQuery event handlers if Prototype fires a custom event
