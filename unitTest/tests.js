@@ -128,3 +128,21 @@ test("jQuery triggerHandler - ensure return value is not lost", 1, function() {
     var retVal = $j('#fixtureChild').triggerHandler('widenevent');
     equal(retVal, 'fooBar', "received correct return value");
 });
+test("Prevent jQuery trigger from executing matching functions on event target contributed by Prototype - String event", 1, function() {
+    var mockedHideFunction = function() {
+        ok(true, "mocked hide function executed");
+    };
+    $('fixtureChild').hide = mockedHideFunction;
+
+    $j('#fixtureChild').trigger('hide');
+    $('fixtureChild').hide();
+});
+test("Prevent jQuery trigger from executing matching functions on event target contributed by Prototype - jQuery event", 1, function() {
+    var mockedHideFunction = function() {
+        ok(true, "mocked hide function executed");
+    };
+    $('fixtureChild').hide = mockedHideFunction;
+
+    $j('#fixtureChild').trigger($j.Event('hide'));
+    $('fixtureChild').hide();
+});
