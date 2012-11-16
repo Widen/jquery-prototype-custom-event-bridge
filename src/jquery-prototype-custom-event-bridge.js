@@ -11,61 +11,55 @@
  */
 /*global jQuery, Element*/
 (function ($) {
-	var oldjQueryTrigger, oldPrototypeFire;
+    var oldjQueryTrigger, oldPrototypeFire;
 
-	oldjQueryTrigger = $.event.trigger;
-	oldPrototypeFire = Element.fire;
+    oldjQueryTrigger = $.event.trigger;
+    oldPrototypeFire = Element.fire;
 
-	//trigger Prototype event handlers if jQuery fires an allowable Prototype custom event
-	$.event.trigger = function(event, data, elem, onlyHandlers) {
-		var oldPrototypeElementMethod, jqueryTriggerRetVal;
+    //trigger Prototype event handlers if jQuery fires an allowable Prototype custom event
+    $.event.trigger = function(event, data, elem, onlyHandlers) {
+        var oldPrototypeElementMethod, jqueryTriggerRetVal, eventName;
 
-		if (elem && event && typeof(event) === 'string' && event.indexOf(':') > 0) {
-			if ($(elem).is(document)) {
-				document.fire(event, data ? data[0] : null);
-			}
-			else {
-				oldPrototypeFire(elem, event, data ? data[0] : null, !onlyHandlers);
-			}
-		}
-		//if Prototype has added a function to the DOM element that matches the jQuery event type, temporarily remove it so jQuery's trigger function doesn't execute it
-		else if (elem && event) {
-			if (typeof(event) === 'object' && event.type) {
-				if (Element.Methods[event.type]) {
-					oldPrototypeElementMethod = elem[event.type];
-					elem[event.type] = null;
-				}
-			}
-			else if (typeof(event) === 'string') {
-				if (Element.Methods[event]) {
-					oldPrototypeElementMethod = elem[event];
-					elem[event] = null;
-				}
-			}
-		}
+        if (event && typeof(event) === 'object' && event.type) {
+            eventName = event.type;
+        }
+        else if (typeof(event) === 'string') {
+            eventName = event;
+        }
 
-		jqueryTriggerRetVal = oldjQueryTrigger(event, data, elem, onlyHandlers);
+        if (elem && eventName && eventName.indexOf(':') > 0) {
+            if ($(elem).is(document)) {
+                document.fire(eventName, data ? data[0] : null);
+            }
+            else {
+                oldPrototypeFire(elem, eventName, data ? data[0] : null, !onlyHandlers);
+            }
+        }
+        //if Prototype has added a function to the DOM element that matches the jQuery event type, temporarily remove it so jQuery's trigger function doesn't execute it
+        else if (elem && eventName) {
+            if (Element.Methods[eventName]) {
+                oldPrototypeElementMethod = elem[eventName];
+                elem[eventName] = null;
+            }
+        }
 
-		//if we removed a Prototype function from this DOM element, add it back after jQuery's trigger function has executed
-		if (oldPrototypeElementMethod) {
-			if (typeof(event) === 'string') {
-				elem[event] = oldPrototypeElementMethod;
-			}
-			else {
-				elem[event.type] = oldPrototypeElementMethod;
-			}
-		}
+        jqueryTriggerRetVal = oldjQueryTrigger(event, data, elem, onlyHandlers);
 
-		return jqueryTriggerRetVal;
-	};
+        //if we removed a Prototype function from this DOM element, add it back after jQuery's trigger function has executed
+        if (oldPrototypeElementMethod) {
+            elem[eventName] = oldPrototypeElementMethod;
+        }
 
-	//trigger jQuery event handlers if Prototype fires a custom event
-	Element.addMethods( {
-		fire: function(element, eventName, memo, bubble) {
-			if (eventName.indexOf(':') > 0) {
-				oldjQueryTrigger(eventName, memo ? [memo] : null, element, Object.isUndefined(bubble) ? false : !bubble);
-			}
-			oldPrototypeFire(element, eventName, memo, bubble);
-		}
-	});
+        return jqueryTriggerRetVal;
+    };
+
+    //trigger jQuery event handlers if Prototype fires a custom event
+    Element.addMethods( {
+        fire: function(element, eventName, memo, bubble) {
+            if (eventName.indexOf(':') > 0) {
+                oldjQueryTrigger(eventName, memo ? [memo] : null, element, Object.isUndefined(bubble) ? false : !bubble);
+            }
+            oldPrototypeFire(element, eventName, memo, bubble);
+        }
+    });
 }(jQuery));
