@@ -18,42 +18,36 @@
 
 	//trigger Prototype event handlers if jQuery fires an allowable Prototype custom event
 	$.event.trigger = function(event, data, elem, onlyHandlers) {
-		var oldPrototypeElementMethod, jqueryTriggerRetVal;
+		var oldPrototypeElementMethod, jqueryTriggerRetVal, eventName;
 
-		if (elem && event && typeof(event) === 'string' && event.indexOf(':') > 0) {
+        if (event && typeof(event) === 'object' && event.type) {
+            eventName = event.type;
+        }
+        else if (typeof(event) === 'string') {
+            eventName = event;
+        }
+
+		if (elem && eventName && eventName.indexOf(':') > 0) {
 			if ($(elem).is(document)) {
-				document.fire(event, data ? data[0] : null);
+				document.fire(eventName, data ? data[0] : null);
 			}
 			else {
-				oldPrototypeFire(elem, event, data ? data[0] : null, !onlyHandlers);
+				oldPrototypeFire(elem, eventName, data ? data[0] : null, !onlyHandlers);
 			}
 		}
 		//if Prototype has added a function to the DOM element that matches the jQuery event type, temporarily remove it so jQuery's trigger function doesn't execute it
-		else if (elem && event) {
-			if (typeof(event) === 'object' && event.type) {
-				if (Element.Methods[event.type]) {
-					oldPrototypeElementMethod = elem[event.type];
-					elem[event.type] = null;
-				}
-			}
-			else if (typeof(event) === 'string') {
-				if (Element.Methods[event]) {
-					oldPrototypeElementMethod = elem[event];
-					elem[event] = null;
-				}
-			}
+		else if (elem && eventName) {
+            if (Element.Methods[eventName]) {
+                oldPrototypeElementMethod = elem[eventName];
+                elem[eventName] = null;
+            }
 		}
 
 		jqueryTriggerRetVal = oldjQueryTrigger(event, data, elem, onlyHandlers);
 
 		//if we removed a Prototype function from this DOM element, add it back after jQuery's trigger function has executed
 		if (oldPrototypeElementMethod) {
-			if (typeof(event) === 'string') {
-				elem[event] = oldPrototypeElementMethod;
-			}
-			else {
-				elem[event.type] = oldPrototypeElementMethod;
-			}
+            elem[eventName] = oldPrototypeElementMethod;
 		}
 
 		return jqueryTriggerRetVal;
