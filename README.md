@@ -1,7 +1,7 @@
 jQuery-prototype-custom-event-bridge
 ====================================
 
-Test it [here](http://widen.github.com/jquery-prototype-custom-event-bridge).
+Test it [here](http://widen.github.com/jquery-prototype-custom-event-bridge/unitTest).
 
 Allow custom events in the format `namespace:eventname` to pass between Prototype and jQuery.
 
