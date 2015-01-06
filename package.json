@@ -1,0 +1,24 @@
+{
+  "name": "jquery-prototype-custom-event-bridge",
+  "version": "1.0.0",
+  "description": "Allow custom events in the format namespace:eventname to pass between Prototype and jQuery.",
+  "main": "jquery-prototype-custom-event-bridge.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Widen/jquery-prototype-custom-event-bridge.git"
+  },
+  "keywords": [
+    "jquery",
+    "prototypejs",
+    "events"
+  ],
+  "author": "Widen Enterprises, Inc",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Widen/jquery-prototype-custom-event-bridge/issues"
+  },
+  "homepage": "https://github.com/Widen/jquery-prototype-custom-event-bridge"
+}
