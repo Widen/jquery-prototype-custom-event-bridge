@@ -161,3 +161,12 @@ test("Prevent jQuery trigger from executing matching functions on event target c
     $j('#fixtureChild').trigger($j.Event('hide'));
     $('fixtureChild').hide();
 });
+test("Prevent jQuery trigger from executing matching functions on event target contributed by Prototype - jQuery w/ a jQuery namespaced event", 1, function() {
+    var mockedHideFunction = function() {
+        ok(true, "mocked hide function executed");
+    };
+    $('fixtureChild').hide = mockedHideFunction;
+
+    $j('#fixtureChild').trigger($j.Event('hide.foo.bar'));
+    $('fixtureChild').hide();
+});

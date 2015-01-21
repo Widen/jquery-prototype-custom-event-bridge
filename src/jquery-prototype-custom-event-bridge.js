@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Widen Enterprises
+ * Copyright (c) 2015 Widen Enterprises
  *
  * Allow custom events in the format 'namespace:eventname' to pass between Prototype and jQuery.
  * Such custom events triggered by jQuery will hit Prototype observers (as well as jQuery listeners).
@@ -7,18 +7,26 @@
  * The first element of the data array passed along by the jQuery trigger will be sent to the Prototype observer.
  * The memo data object passed along by the Prototype trigger will be encoded in the first element of the event
  * data array received by the jQuery listener.
- * This drop-in also prevents jQuery's trigger implementation from executing any functions on an event target element that match the jQuery event type.
+ * This drop-in also prevents jQuery's trigger implementation from executing any Prototype-contributed functions on an event target element that match the jQuery event type.
  */
 /*global jQuery, Element*/
 (function ($) {
-    var oldjQueryTrigger, oldPrototypeFire;
+    var oldjQueryTrigger, oldPrototypeFire,
+    // extract the base event name, accounting for jQuery namespaced event names, such as "hide.bs.collapse", where
+    // the underlying event type is actually "hide".
+        getPrototypeMethodName = function(eventName) {
+            if (eventName.indexOf('.') > 0) {
+                eventName = eventName.split('.')[0];
+            }
+            return Element.Methods[eventName] ? eventName : null;
+        };
 
     oldjQueryTrigger = $.event.trigger;
     oldPrototypeFire = Element.fire;
 
     //trigger Prototype event handlers if jQuery fires an allowable Prototype custom event
     $.event.trigger = function(event, data, elem, onlyHandlers) {
-        var oldPrototypeElementMethod, jqueryTriggerRetVal, eventName;
+        var oldPrototypeElementMethod, jqueryTriggerRetVal, eventName, prototypeMethodName;
 
         if (event && typeof(event) === 'object' && event.type) {
             eventName = event.type;
@@ -37,9 +45,13 @@
         }
         //if Prototype has added a function to the DOM element that matches the jQuery event type, temporarily remove it so jQuery's trigger function doesn't execute it
         else if (elem && eventName) {
-            if (Element.Methods[eventName]) {
-                oldPrototypeElementMethod = elem[eventName];
-                elem[eventName] = null;
+            // If this is a jQuery namespaced event name, we may need to extract the underlying base event type from
+            // this event name to determine if Prototype has an associated method attached to the element.  jQuery
+            // will otherwise do the same and invoke the method on the element, so we must prevent this from happening
+            prototypeMethodName = getPrototypeMethodName(eventName);
+            if (prototypeMethodName) {
+                oldPrototypeElementMethod = elem[prototypeMethodName];
+                elem[prototypeMethodName] = null;
             }
         }
 
@@ -47,7 +59,7 @@
 
         //if we removed a Prototype function from this DOM element, add it back after jQuery's trigger function has executed
         if (oldPrototypeElementMethod) {
-            elem[eventName] = oldPrototypeElementMethod;
+            elem[prototypeMethodName] = oldPrototypeElementMethod;
         }
 
         return jqueryTriggerRetVal;
