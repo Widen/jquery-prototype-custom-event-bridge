@@ -1,6 +1,6 @@
 {
   "name": "jquery-prototype-custom-event-bridge",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Allow custom events in the format namespace:eventname to pass between Prototype and jQuery.",
   "main": "jquery-prototype-custom-event-bridge.js",
   "scripts": {
