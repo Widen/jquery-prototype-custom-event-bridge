@@ -11,18 +11,17 @@
  */
 /*global jQuery, Element*/
 (function ($) {
-    var oldjQueryTrigger, oldPrototypeFire,
-    // extract the base event name, accounting for jQuery namespaced event names, such as "hide.bs.collapse", where
-    // the underlying event type is actually "hide".
-        getPrototypeMethodName = function(eventName) {
+        // extract the base event name, accounting for jQuery namespaced event names, such as "hide.bs.collapse", where
+        // the underlying event type is actually "hide".
+    var getPrototypeMethodName = function(eventName) {
             if (eventName.indexOf('.') > 0) {
                 eventName = eventName.split('.')[0];
             }
             return Element.Methods[eventName] ? eventName : null;
-        };
-
-    oldjQueryTrigger = $.event.trigger;
-    oldPrototypeFire = Element.fire;
+        },
+        oldPrototypeDocumentFire = document.fire,
+        oldjQueryTrigger = $.event.trigger,
+        oldPrototypeFire = Element.fire;
 
     //trigger Prototype event handlers if jQuery fires an allowable Prototype custom event
     $.event.trigger = function(event, data, elem, onlyHandlers) {
@@ -37,7 +36,7 @@
 
         if (elem && eventName && eventName.indexOf(':') > 0) {
             if ($(elem).is(document)) {
-                document.fire(eventName, data ? data[0] : null);
+                document.fire(eventName, data ? data[0] : null, false, true);
             }
             else {
                 oldPrototypeFire(elem, eventName, data ? data[0] : null, !onlyHandlers);
@@ -72,6 +71,15 @@
                 oldjQueryTrigger(eventName, memo ? [memo] : null, element, Object.isUndefined(bubble) ? false : !bubble);
             }
             oldPrototypeFire(element, eventName, memo, bubble);
+        }
+    });
+
+    Object.extend(document, {
+        fire: function(eventName, memo, bubble, bridged) {
+            if (eventName.indexOf(':') > 0 && !bridged) {
+                oldjQueryTrigger(eventName, memo ? [memo] : null, document);
+            }
+            oldPrototypeFire(document, eventName, memo);
         }
     });
 }(jQuery));

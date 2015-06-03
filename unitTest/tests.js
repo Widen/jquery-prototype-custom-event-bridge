@@ -111,6 +111,7 @@ test("jQuery triggered event, including data, with a jQuery observer (document)"
 	});
     $j(document).trigger('widen:event', [{foo : 'bar'}] );
     $j(document).trigger($j.Event('widen:event'), [{foo : 'bar'}] );
+	$j(document).unbind('widen:event');
 });
 test("Prototype fired event with a Prototype listener (document):", 1, function() {
 	$(document).observe('widen:event', function() {
@@ -127,6 +128,22 @@ test("Prototype fired event, including data, with a Prototype listener (document
 	});
 	$(document).fire('widen:event', {foo : 'bar'});
     $(document).stopObserving('widen:event');
+});
+test("Prototype triggered event with a jQuery observer (document)", 1, function() {
+	$j(document).bind('widen:event', function() {
+		receivedEvent();
+	});
+	$(document).fire('widen:event');
+	$j(document).unbind('widen:event');
+});
+test("Prototype triggered event, including data, with a jQuery observer (document)", 1, function() {
+	$j(document).bind('widen:event', function(event, data) {
+		if (data && data.foo === 'bar') {
+			receivedEvent();
+		}
+	});
+	$(document).fire('widen:event', {foo : 'bar'} );
+	$j(document).unbind('widen:event');
 });
 test("jQuery triggerHandler - ensure return value is not lost", function() {
     $j('#fixtureChild').on('widenevent', function() {
