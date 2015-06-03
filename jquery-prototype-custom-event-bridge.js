@@ -19,7 +19,6 @@
             }
             return Element.Methods[eventName] ? eventName : null;
         },
-        oldPrototypeDocumentFire = document.fire,
         oldjQueryTrigger = $.event.trigger,
         oldPrototypeFire = Element.fire;
 
